@@ -36,7 +36,7 @@
 2. Open the project in Android Studio.
 3. Build and run the application on a device or Android emulator.
 
-### Proyecto Didáctico / Educational Project
+## Proyecto Didáctico / Educational Project
 
 📚 Este proyecto es parte de la materia de **Requerimientos de Software** en el **Instituto Tecnológico de Costa Rica**. Tiene como objetivo poner en práctica los conocimientos adquiridos en el curso.
 
