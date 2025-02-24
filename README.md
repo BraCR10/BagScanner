@@ -38,9 +38,10 @@
 
 ## Licencia / License
 
-📜 Este proyecto está bajo la **Licencia Pública General de GNU v3 (GPL v3)**. La GPL v3 protege el código contra el plagio al exigir que se dé crédito adecuado a los autores y que cualquier modificación del código también se comparta bajo la misma licencia. Esto asegura que el trabajo original y cualquier derivado sigan siendo abiertos y accesibles para otros.
+📜 Este proyecto está bajo la Licencia Pública General de GNU v3 (GPL v3). La GPL v3 protege el código contra el **plagio** al exigir que cualquier persona que redistribuya o modifique el código debe dar **crédito adecuado** a los autores originales. Si alguien utiliza el código sin dar el crédito correspondiente o lo redistribuye sin cumplir con los términos de esta licencia, estaría incurriendo en **plagio**. Además, cualquier modificación del código debe ser compartida bajo la misma licencia. Esto asegura que el trabajo original y cualquier derivado sigan siendo abiertos y accesibles para otros, y protege los derechos de los autores.
 
-📜 This project is licensed under the **GNU General Public License v3 (GPL v3)**. GPL v3 protects the code against plagiarism by requiring proper attribution to the authors and that any modification of the code also be shared under the same license. This ensures that the original work and any derivatives remain open and accessible to others.
+📜 This project is licensed under the GNU General Public License v3 (GPL v3). GPL v3 protects the code against **plagiarism** by requiring that anyone redistributing or modifying the code must give **proper attribution** to the original authors. If someone uses the code without giving the appropriate credit or redistributes it without complying with the terms of this license, they would be committing **plagiarism**. Additionally, any modification of the code must be shared under the same license. This ensures that the original work and any derivatives remain open and accessible to others, and protects the rights of the authors.
+
 
 Consulta el archivo [LICENSE](./LICENSE) para más detalles.
 
