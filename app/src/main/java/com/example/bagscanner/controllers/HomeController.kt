@@ -1,7 +1,7 @@
 package com.example.bagscanner.controllers
 
 
-import android.annotation.SuppressLint
+
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
