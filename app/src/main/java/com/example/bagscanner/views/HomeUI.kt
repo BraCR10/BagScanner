@@ -1,11 +1,18 @@
 package com.example.bagscanner.views
 
+// 1. Standard Kotlin packages
+import androidx.compose.runtime.*
+
+// 2. Compose Foundation imports
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+
+// 3. Compose Material imports
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+
+// 4. Compose UI imports
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,7 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+
+// 5. Project-specific imports
 import com.example.bagscanner.controllers.HomeController
+
 
 @Composable
 fun HomeScreen(controller: HomeController = viewModel()) {
@@ -30,7 +40,7 @@ fun HomeScreen(controller: HomeController = viewModel()) {
                 .fillMaxWidth()
                 .heightIn(min = 100.dp, max = LocalConfiguration.current.screenHeightDp.dp * 0.3f)
                 .background(Color(0xFFDAC5A0))
-                .shadow(4.dp),
+                .border(2.dp, Color(0xFF388E3C)),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -61,6 +71,7 @@ fun HomeScreen(controller: HomeController = viewModel()) {
                 .background(Color(0xFFDAC5A0))
                 //.clip(shape = RoundedCornerShape(10.dp))
                 .border(2.dp, Color(0xFF388E3C)),
+
             contentAlignment = Alignment.Center
         ) {
             Text(
