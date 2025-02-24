@@ -36,6 +36,12 @@
 2. Open the project in Android Studio.
 3. Build and run the application on a device or Android emulator.
 
+### Proyecto Didáctico / Educational Project
+
+📚 Este proyecto es parte de la materia de **Requerimientos de Software** en el **Instituto Tecnológico de Costa Rica**. Tiene como objetivo poner en práctica los conocimientos adquiridos en el curso.
+
+📚 This project is part of the **Software Requirements** course at the **Instituto Tecnológico de Costa Rica**. Its purpose is to apply the knowledge acquired in the course.
+
 ## Licencia / License
 
 📜 Este proyecto está bajo la Licencia Pública General de GNU v3 (GPL v3). La GPL v3 protege el código contra el **plagio** al exigir que cualquier persona que redistribuya o modifique el código debe dar **crédito adecuado** a los autores originales. Si alguien utiliza el código sin dar el crédito correspondiente o lo redistribuye sin cumplir con los términos de esta licencia, estaría incurriendo en **plagio**. Además, cualquier modificación del código debe ser compartida bajo la misma licencia. Esto asegura que el trabajo original y cualquier derivado sigan siendo abiertos y accesibles para otros, y protege los derechos de los autores.
