@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 
 // 3. Compose Material imports
 import androidx.compose.material3.*
@@ -17,8 +16,6 @@ import androidx.compose.material3.*
 // 4. Compose UI imports
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -58,7 +55,7 @@ fun HomeScreen(controller: HomeController = viewModel()) {
                 color = Color.Black
             )
         }
-
+        //Camera space
         AndroidView(
             factory = { ctx ->
                 val previewView = PreviewView(ctx).apply {
@@ -67,7 +64,7 @@ fun HomeScreen(controller: HomeController = viewModel()) {
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
                 }
-                cameraService.startCamera(previewView, lifecycleOwner)
+                cameraService.viewCamera(previewView, lifecycleOwner)
                 previewView
             },
             modifier = Modifier
