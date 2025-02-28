@@ -30,13 +30,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 // 5. Project-specific imports
 import com.example.bagscanner.controllers.HomeController
 import com.example.bagscanner.services.CameraService
+import com.example.bagscanner.services.ModelService
+//import com.example.bagscanner.enums.BagTypes
 
 @Composable
 fun HomeScreen(controller: HomeController = viewModel()) {
     val homeState by controller.bagState.collectAsState()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val cameraService = remember { CameraService(context) }
+    val modelService = remember { ModelService(context) }
+    val cameraService = remember {
+        CameraService(context, modelService, controller)
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         // Header

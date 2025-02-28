@@ -21,7 +21,6 @@ import com.example.bagscanner.enums.BagTypes
 class HomeController : ViewModel() {
 
     private val _currentBag = MutableStateFlow(HomeModel())
-
     val bagState: StateFlow<HomeModel> = _currentBag
 
     fun updateBagType(newType: BagTypes) {
