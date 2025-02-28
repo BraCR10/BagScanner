@@ -57,6 +57,11 @@ dependencies {
     implementation(libs.camerax.view)
     implementation(libs.camerax.extensions)
 
+    implementation(libs.tensorflow.lite)
+    implementation(libs.tensorflow.lite.gpu)
+    implementation(libs.tensorflow.lite.gpu.api)
+    implementation(libs.tensorflow.lite.gpu.delegate.plugin)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
