@@ -16,7 +16,7 @@ class HomeController : ViewModel() {
     private var lastDetectedType: BagTypes = BagTypes.Unknown
     private var detectionCount = 0
 
-    private val detectionUpdateLimit = 10
+    private val detectionUpdateLimit = 5
 
     fun updateBagType(newType: BagTypes) {
         try {
