@@ -60,8 +60,10 @@ fun HomeScreen(controller: HomeController = viewModel()) {
                 .border(2.dp, Color(0xFFB0B0B0)),
             contentAlignment = Alignment.Center
         ) {
+
             Text(text = "[Camera box]", color = Color.Gray, fontSize = 18.sp)
         }
+
 
         // Footer with detected bag type
         Box(
@@ -83,8 +85,6 @@ fun HomeScreen(controller: HomeController = viewModel()) {
         }
     }
 }
-
-
 
 @Preview(showBackground = true)
 @Composable
