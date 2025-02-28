@@ -1,5 +1,6 @@
 package com.example.bagscanner.services
 
+// Importing necessary Android and CameraX libraries
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
@@ -7,35 +8,59 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.LifecycleOwner
-import androidx.core.content.ContextCompat
 
+// Importing concurrency utilities
+import androidx.core.content.ContextCompat
 import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import com.example.bagscanner.services.ModelService
+
+// Importing application-specific services
 import com.example.bagscanner.enums.BagTypes
 import com.example.bagscanner.controllers.HomeController
 
-class CameraService(private val context: Context, private val modelService: ModelService, private val controller: HomeController) {
+
+class CameraService(private val context: Context, private val scannerModelService: ScannerModelService, private val controller: HomeController) {
 
     private var cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+    private var imageAnalyzer: ImageAnalysis? = null
 
     fun viewCamera(previewView: PreviewView, lifecycleOwner: LifecycleOwner) {
-        val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> =
+        val cameraProviderThread: ListenableFuture<ProcessCameraProvider> =
             ProcessCameraProvider.getInstance(context)
 
-        cameraProviderFuture.addListener(
+        cameraProviderThread.addListener(
             {
                 try {
-                    val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+                    val cameraProvider: ProcessCameraProvider = cameraProviderThread.get()
                     val preview = Preview.Builder()
                         .build()
                         .also {
                             it.surfaceProvider = previewView.surfaceProvider
                         }
 
-                    val imageCapture = ImageCapture.Builder()
+
+                    imageAnalyzer = ImageAnalysis.Builder()
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build()
+                        .also {
+                            it.setAnalyzer(cameraExecutor) { image ->
+                                try {
+                                    val bitmap = image.toBitmap()
+                                    val input = processImage(bitmap)
+                                    val result = scannerModelService.runInference(input)
+                                    val detectedBagType = recognizeScannerDetection(result)
+
+                                    ContextCompat.getMainExecutor(context).execute {
+                                        controller.updateBagType(detectedBagType)
+                                    }
+                                } catch (e: Exception) {
+                                    Log.e("CameraService", "Error processing image", e)
+                                } finally {
+                                    image.close()
+                                }
+                            }
+                        }
 
                     val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -44,36 +69,18 @@ class CameraService(private val context: Context, private val modelService: Mode
                         lifecycleOwner,
                         cameraSelector,
                         preview,
-                        imageCapture
-                    )
-
-                    imageCapture.takePicture(
-                        ContextCompat.getMainExecutor(context),
-                        object : ImageCapture.OnImageCapturedCallback() {
-                            override fun onCaptureSuccess(image: ImageProxy) {
-                                val bitmap = image.toBitmap()
-                                val input = preprocessImage(bitmap)
-                                val result = modelService.runInference(input)
-                                val detectedBagType = postprocessResult(result)
-                                controller.updateBagType(detectedBagType)
-                                image.close()
-                            }
-
-                            override fun onError(exception: ImageCaptureException) {
-                                Log.e("CameraService", "Error capturing image", exception)
-                            }
-                        }
+                        imageAnalyzer
                     )
 
                 } catch (exc: Exception) {
-                    Log.e("CameraService", "Error camera does not work ", exc)
+                    Log.e("CameraService", "Error binding camera use cases", exc)
                 }
             },
             ContextCompat.getMainExecutor(context))
     }
 
-    private fun preprocessImage(bitmap: Bitmap): FloatArray {
-        val modelInputSize = 224
+    private fun processImage(bitmap: Bitmap): FloatArray {
+        val modelInputSize = 225
         val resizedBitmap = Bitmap.createScaledBitmap(bitmap, modelInputSize, modelInputSize, true)
 
         val inputArray = FloatArray(modelInputSize * modelInputSize * 3)
@@ -84,16 +91,27 @@ class CameraService(private val context: Context, private val modelService: Mode
             val r = (pixelValues[i] shr 16 and 0xFF) / 255.0f
             val g = (pixelValues[i] shr 8 and 0xFF) / 255.0f
             val b = (pixelValues[i] and 0xFF) / 255.0f
-            inputArray[i * 3] = r
-            inputArray[i * 3 + 1] = g
-            inputArray[i * 3 + 2] = b
+
+
+            inputArray[i * 3] = (r - 0.5f) * 2.0f
+            inputArray[i * 3 + 1] = (g - 0.5f) * 2.0f
+            inputArray[i * 3 + 2] = (b - 0.5f) * 2.0f
         }
 
         return inputArray
     }
 
-    private fun postprocessResult(result: FloatArray): BagTypes{
-        val maxIndex = result.indices.maxByOrNull { result[it] } ?: 0
+    private fun recognizeScannerDetection(result: FloatArray): BagTypes {
+        if (result.isEmpty()) return BagTypes.Unknown
+        var maxIndex = 0
+        var maxValue = result[0]
+
+        for (i in 1 until result.size) {
+            if (result[i] > maxValue) {
+                maxIndex = i
+                maxValue = result[i]
+            }
+        }
 
         return when (maxIndex) {
             0 -> BagTypes.Briefcase
@@ -102,6 +120,7 @@ class CameraService(private val context: Context, private val modelService: Mode
             else -> BagTypes.Unknown
         }
     }
+
 
     fun shutdown() {
         cameraExecutor.shutdown()
