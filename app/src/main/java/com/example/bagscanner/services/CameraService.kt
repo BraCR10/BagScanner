@@ -48,7 +48,7 @@ class CameraService(private val context: Context, private val scannerModelServic
                                 try {
                                     val bitmap = image.toBitmap()
                                     val input = processImage(bitmap)
-                                    val result = scannerModelService.runInference(input)
+                                    val result = scannerModelService.runModel(input)
                                     val detectedBagType = recognizeScannerDetection(result)
 
                                     ContextCompat.getMainExecutor(context).execute {
