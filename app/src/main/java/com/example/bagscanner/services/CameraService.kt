@@ -31,49 +31,22 @@ class CameraService(
     private val scannerModelService: ScannerModelService,
     private val controller: HomeController
 ) {
+    //Attributes
     private var cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
     private var imageAnalyzer: ImageAnalysis? = null
+    private val imageProcessor: ImageProcessor = createImageProcessor()
 
-
-    private val imageProcessor by lazy {
-        ImageProcessor.Builder()
-            .add(ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR))
-            .add(NormalizeOp(0f, 255f))
-            .build()
-    }
-
+    //Methods
     fun viewCamera(previewView: PreviewView, lifecycleOwner: LifecycleOwner) {
-        val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> =
+        val cameraThread: ListenableFuture<ProcessCameraProvider> =
             ProcessCameraProvider.getInstance(context)
 
-        cameraProviderFuture.addListener({
+        cameraThread.addListener(
+            {
             try {
-                val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-                val preview = Preview.Builder().build().also {
-                    it.surfaceProvider = previewView.surfaceProvider
-                }
-
-                imageAnalyzer = ImageAnalysis.Builder()
-                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                    .build()
-                    .also {
-                        it.setAnalyzer(cameraExecutor) { imageProxy ->
-                            try {
-                                val tensorImage = processImage(imageProxy)
-                                val result = scannerModelService.runModel(tensorImage)
-                                val detectedBagType = recognizeScannerDetection(result)
-
-                                ContextCompat.getMainExecutor(context).execute {
-                                    controller.updateBagType(detectedBagType)
-                                }
-                            } catch (e: Exception) {
-                                Log.e("CameraService", "Error processing image", e)
-                            } finally {
-                                imageProxy.close()
-                            }
-                        }
-                    }
-
+                val cameraProvider: ProcessCameraProvider = cameraThread.get()
+                val preview = createPreview(previewView)
+                val imageAnalyzer = createImageAnalyzer()
                 val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
                 cameraProvider.unbindAll()
@@ -85,23 +58,83 @@ class CameraService(
                 )
 
             } catch (exc: Exception) {
-                Log.e("CameraService", "Error binding camera use cases", exc)
+                Log.e("CameraService", "Error setting up camera uses cases", exc)
             }
-        }, ContextCompat.getMainExecutor(context))
+        },ContextCompat.getMainExecutor(context))
     }
 
-    private fun processImage(imageProxy: ImageProxy): TensorImage {
+    private fun createImageProcessor(): ImageProcessor {
+        val builder = ImageProcessor.Builder()
+        //224x224
+        builder.add(ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR))
+        //TODO: Set proper way to normalize the img
+        builder.add(NormalizeOp(0f, 255f))
+        return builder.build()
+    }
+
+    private fun createPreview(previewView: PreviewView): Preview {
+        val preview = Preview.Builder().build()
+        preview.surfaceProvider = previewView.surfaceProvider
+        return preview
+    }
+
+    private fun createImageAnalyzer(): ImageAnalysis {
+        val imageAnalyzer = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+
+        //Setting analyzer
+        imageAnalyzer.setAnalyzer(cameraExecutor) { imageProxy -> scanImage(imageProxy) }
+        return imageAnalyzer
+    }
+
+    private fun scanImage(image: ImageProxy) {
+        val executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            try {
+                val tensorImage = processImgToTensor(image)
+                val result = scannerModelService.runModel(tensorImage)
+                val detectedBagType = recognizeScannerDetection(result)
+                updateBagTypeOnMainThread(detectedBagType)
+            } catch (e: Exception) {
+                Log.e("CameraService", "Error scanning image", e)
+            } finally {
+                image.close()
+            }
+        }
+    }
+
+    private fun updateBagTypeOnMainThread(detectedBagType: BagTypes) {
+        ContextCompat.getMainExecutor(context).execute {
+            controller.updateBagType(detectedBagType)
+        }
+    }
+
+    private fun processImgToTensor(image: ImageProxy): TensorImage {
         val tensorImage = TensorImage(DataType.FLOAT32)
-        val bitmap = imageProxy.toBitmap()
+        val bitmap = image.toBitmap()
         tensorImage.load(bitmap)
 
-        return imageProcessor.process(tensorImage)
+        return this.imageProcessor.process(tensorImage)
     }
 
     private fun recognizeScannerDetection(result: FloatArray): BagTypes {
-        return when (result.indices.maxByOrNull { result[it] } ?: -1) {
-            0 -> BagTypes.Briefcase
-            1 -> BagTypes.Bag
+        if (result.isEmpty()) {
+            return BagTypes.Unknown
+        }
+
+        var maxIndex = 0
+        var maxValue = result[0]
+        for (i in 1 until result.size) {
+            if (result[i] > maxValue) {
+                maxValue = result[i]
+                maxIndex = i
+            }
+        }
+
+        return when (maxIndex) {
+            0 -> BagTypes.Bag
+            1 -> BagTypes.Briefcase
             2 -> BagTypes.Lunchbox
             else -> BagTypes.Unknown
         }
