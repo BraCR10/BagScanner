@@ -6,6 +6,7 @@
 
 📱 This project is an Android application capable of detecting the type of handbag that appears in an image taken by the device's camera. We use **Jetpack Compose** and **Kotlin** with the **MVC** (Model-View-Controller) pattern. For image capture, we use **CameraX**. We are currently defining the technology to use for classifying the images and detecting the type of handbag.
 
+ [Bag Scanner UI design - Figma](https://www.figma.com/design/1isxivbLKitzPGKCGwwNHn/Bag-Scanner-UI-design?node-id=0-1&t=pFL3dTNneEtU50gI-1)
 ## Tipos de Bolso / Bag Types
 
 👜 La aplicación identifica los siguientes tipos de bolsos/The application identifies the following types of handbags:
@@ -21,7 +22,8 @@
 - ![Kotlin](https://img.shields.io/badge/Kotlin-%7B7F52FF?style=for-the-badge&logo=kotlin&logoColor=white) **Kotlin for Logic**
 - ![CameraX](https://img.shields.io/badge/CameraX-%233a2d44?style=for-the-badge&logo=android&logoColor=white) **CameraX to take pictures in the app**
 - ![MVC Pattern](https://img.shields.io/badge/MVC%20Pattern-%2300B0FF?style=for-the-badge&logo=angular&logoColor=white) **MVC pattern for better project order**
-- **Clasificación (por definir)**
+- ![TensorFlow Lite](https://img.shields.io/badge/TensorFlow%20Lite-%23FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white) **TensorFlow Lite for image classification**
+- Model created using **[Teachable Machine](https://teachablemachine.withgoogle.com/)** for training the bag classification model.
 
 ## Instalación
 
