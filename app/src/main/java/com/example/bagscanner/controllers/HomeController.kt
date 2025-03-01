@@ -9,15 +9,14 @@ import com.example.bagscanner.views.HomeScreen
 import com.example.bagscanner.enums.BagTypes
 
 class HomeController : ViewModel() {
-
+    // Attributes
     private val _currentBag = MutableStateFlow(BagModel())
     val bagState: StateFlow<BagModel> = _currentBag
-
     private var lastDetectedType: BagTypes = BagTypes.Unknown
     private var detectionCount = 0
-
     private val detectionUpdateLimit = 5
 
+    //Methods 
     fun updateBagType(newType: BagTypes) {
         try {
             if (newType == lastDetectedType) {
