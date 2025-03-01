@@ -4,6 +4,6 @@ package com.example.bagscanner.models
 import com.example.bagscanner.enums.BagTypes
 
 
-class HomeModel(
+class BagModel(
     val detectedBagType: BagTypes = BagTypes.Unknown
 )

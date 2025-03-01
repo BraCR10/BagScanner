@@ -1,31 +1,45 @@
 package com.example.bagscanner.controllers
 
-
-
-// 1. Standard Kotlin packages
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-
-// 2. Compose imports
+// 1. Jetpack Compose & ViewModel imports
 import androidx.compose.runtime.Composable
-
-// 3. Jetpack libraries
 import androidx.lifecycle.ViewModel
 
-// 4. Project-specific imports
-import com.example.bagscanner.models.HomeModel
+// 2. Project-specific imports
+import com.example.bagscanner.models.BagModel
 import com.example.bagscanner.views.HomeScreen
 import com.example.bagscanner.enums.BagTypes
 
+// 3. Kotlin Coroutines imports
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
 
 class HomeController : ViewModel() {
+    // Attributes
+    private val _currentBag = MutableStateFlow(BagModel())
+    val bagState: StateFlow<BagModel> = _currentBag
+    private var lastDetectedType: BagTypes = BagTypes.Unknown
+    private var detectionCount = 0
+    private val detectionUpdateLimit = 5
 
-    private val _currentBag = MutableStateFlow(HomeModel())
-
-    val bagState: StateFlow<HomeModel> = _currentBag
-
+    //Methods 
     fun updateBagType(newType: BagTypes) {
-        _currentBag.value = HomeModel(detectedBagType = newType)
+        try {
+            if (newType == lastDetectedType) {
+                detectionCount++
+
+                if (detectionCount >= detectionUpdateLimit &&
+                    _currentBag.value.detectedBagType != newType) {
+                    _currentBag.value = BagModel(detectedBagType = newType)
+                }
+            } else {
+
+                lastDetectedType = newType
+                detectionCount = 1
+            }
+        } catch (e: Exception) {
+           println("Error has occurred updating the bag state")
+        }
     }
 
     @Composable
