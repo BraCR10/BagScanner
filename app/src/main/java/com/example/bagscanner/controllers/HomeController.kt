@@ -1,12 +1,18 @@
 package com.example.bagscanner.controllers
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+// 1. Jetpack Compose & ViewModel imports
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
+
+// 2. Project-specific imports
 import com.example.bagscanner.models.BagModel
 import com.example.bagscanner.views.HomeScreen
 import com.example.bagscanner.enums.BagTypes
+
+// 3. Kotlin Coroutines imports
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
 
 class HomeController : ViewModel() {
     // Attributes
