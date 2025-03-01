@@ -110,7 +110,7 @@ fun HomeScreen(controller: HomeController = viewModel()) {
             }
 
             Text(
-                text = "Tipo de bolso: $bagTypeText",
+                text = "Objeto encontrado: $bagTypeText",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
