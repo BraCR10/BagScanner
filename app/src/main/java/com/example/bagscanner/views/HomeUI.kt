@@ -121,16 +121,19 @@ fun HomeScreen(controller: HomeController = viewModel()) {
 }
 @Composable
 fun rememberPreviewView(context: Context): PreviewView {
-    return remember {
-        PreviewView(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-        }
-    }
+    val previewView = remember { PreviewView(context) }
+
+    val layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT
+    )
+    previewView.layoutParams = layoutParams
+
+    previewView.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+
+    return previewView
 }
+
 @Composable
 fun RenderPreviewView(previewView: PreviewView, cameraService: CameraService, lifecycleOwner: LifecycleOwner) {
     AndroidView(
