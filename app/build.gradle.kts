@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.bagscanner"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -58,9 +58,8 @@ dependencies {
     implementation(libs.camerax.extensions)
 
     implementation(libs.tensorflow.lite)
-    implementation(libs.tensorflow.lite.gpu)
-    implementation(libs.tensorflow.lite.gpu.api)
-    implementation(libs.tensorflow.lite.gpu.delegate.plugin)
+    implementation(libs.tensorflow.lite.support)
+    implementation(libs.tensorflow.lite.metadata)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

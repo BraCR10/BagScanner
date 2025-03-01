@@ -1,74 +1,73 @@
 package com.example.bagscanner
 
+// 1. Standard Android packages
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
+import android.content.Intent
+import android.provider.Settings
+import android.net.Uri
+
+// 2. Activity and Lifecycle-related imports
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.camera.view.CameraController
-import androidx.camera.view.LifecycleCameraController
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.contract.ActivityResultContracts
+
+// 3. Permission-related imports
 import androidx.core.content.ContextCompat
+
+// 4. Project-specific imports
 import com.example.bagscanner.controllers.HomeController
-import com.example.bagscanner.views.CameraPreview
 
 class MainActivity : ComponentActivity() {
+
+    private val cameraPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            startApp()
+        } else {
+            Toast.makeText(this, "La aplicación requiere permiso de cámara para funcionar", Toast.LENGTH_LONG).show()
+            showSettingsPrompt()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(!hasRequiredPermissions()) {
-            ActivityCompat.requestPermissions(
-                this, CAMERAX_PERMISSIONS, 0
-            )
-        }
-        enableEdgeToEdge()
-        setContent {
-            val controller = HomeController()
-            controller.DisplayScreen()
-            val padding = 100.dp
 
-            val controller2 = remember {
-                LifecycleCameraController(applicationContext).apply {
-                    setEnabledUseCases(CameraController.IMAGE_CAPTURE)
-                }
+        // Check camera access
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED) {
+            startApp()
+        } else {
+            cameraPermissionRequest.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    private fun startApp() {
+        try {
+            setContent {
+                val controller = HomeController()
+                controller.DisplayScreen()
             }
-            CameraPreview(
-
-                controller = controller2,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-            )
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error al iniciar la aplicación: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 
-    private fun hasRequiredPermissions(): Boolean {
-        return CAMERAX_PERMISSIONS.all {
-            ContextCompat.checkSelfPermission(
-                applicationContext,
-                it
-            ) == PackageManager.PERMISSION_GRANTED
-        }
-    }
+    private fun showSettingsPrompt() {
+        Toast.makeText(
+            this,
+            "Por favor habilita el permiso de cámara en la configuración",
+            Toast.LENGTH_LONG
+        ).show()
 
-    companion object {
-        private val CAMERAX_PERMISSIONS = arrayOf(
-            Manifest.permission.CAMERA,
-        )
+        // Option to go native cell phone settings
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", packageName, null)
+        intent.data = uri
+        startActivity(intent)
+        finish()
     }
 }
-
