@@ -1,6 +1,7 @@
 package com.example.bagscanner.views
 
 // 1. Standard Kotlin packages
+import android.content.Context
 import android.view.ViewGroup
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.*
@@ -25,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -46,7 +48,7 @@ fun HomeScreen(controller: HomeController = viewModel()) {
 
     /*
     *
-    * With this feature the camera will blind once a new type is detected
+    * With this feature the camera will turn off the camera in each recompose
     *
     DisposableEffect(lifecycleOwner) {
         onDispose {
@@ -86,21 +88,8 @@ fun HomeScreen(controller: HomeController = viewModel()) {
                 .background(Color(0xFFF0F0F0))
                 .border(2.dp, Color(0xFFB0B0B0))
         ) {
-            AndroidView(
-                factory = { ctx ->
-                    PreviewView(ctx).apply {
-                        layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT
-                        )
-                        implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-                    }
-                },
-                modifier = Modifier.fillMaxSize(),
-                update = { previewView ->
-                    cameraService.viewCamera(previewView, lifecycleOwner)
-                }
-            )
+            val previewView = rememberPreviewView(context)
+            RenderPreviewView(previewView, cameraService, lifecycleOwner)
         }
 
         // Footer
@@ -129,6 +118,26 @@ fun HomeScreen(controller: HomeController = viewModel()) {
             )
         }
     }
+}
+@Composable
+fun rememberPreviewView(context: Context): PreviewView {
+    return remember {
+        PreviewView(context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+        }
+    }
+}
+@Composable
+fun RenderPreviewView(previewView: PreviewView, cameraService: CameraService, lifecycleOwner: LifecycleOwner) {
+    AndroidView(
+        factory = { previewView },
+        modifier = Modifier.fillMaxSize(),
+        update = { cameraService.viewCamera(it, lifecycleOwner) }
+    )
 }
 
 @Preview(showBackground = true)
