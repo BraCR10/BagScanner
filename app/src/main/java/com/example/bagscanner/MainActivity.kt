@@ -18,7 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 
 // 4. Project-specific imports
-import com.example.bagscanner.controllers.HomeController
+import com.example.bagscanner.controllers.ScannerController
 
 class MainActivity : ComponentActivity() {
 
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
     private fun startApp() {
         try {
             setContent {
-                val controller = HomeController()
+                val controller = ScannerController()
                 controller.DisplayScreen()
             }
         } catch (e: Exception) {

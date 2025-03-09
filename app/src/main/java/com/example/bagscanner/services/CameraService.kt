@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 
 // 2. Project-specific imports
-import com.example.bagscanner.controllers.HomeController
+import com.example.bagscanner.controllers.ScannerController
 import com.example.bagscanner.enums.BagTypes
 import com.google.common.util.concurrent.ListenableFuture
 
@@ -29,7 +29,7 @@ import java.util.concurrent.Executors
 class CameraService(
     private val context: Context,
     private val scannerModelService: ScannerModelService,
-    private val controller: HomeController
+    private val controller: ScannerController
 ) {
     //Attributes
     private var cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()

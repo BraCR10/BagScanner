@@ -32,13 +32,13 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 // 5. Project-specific imports
-import com.example.bagscanner.controllers.HomeController
+import com.example.bagscanner.controllers.ScannerController
 import com.example.bagscanner.services.CameraService
 import com.example.bagscanner.services.ScannerModelService
 import com.example.bagscanner.enums.BagTypes
 
 @Composable
-fun HomeScreen(controller: HomeController = viewModel()) {
+fun HomeScreen(controller: ScannerController = viewModel()) {
     val homeState by controller.bagState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -146,6 +146,6 @@ fun RenderPreviewView(previewView: PreviewView, cameraService: CameraService, li
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
-    val simulatedHomeController = HomeController()
+    val simulatedHomeController = ScannerController()
     HomeScreen(controller = simulatedHomeController)
 }

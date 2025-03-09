@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 
-class HomeController : ViewModel() {
+class ScannerController : ViewModel() {
     // Attributes
     private val _currentBag = MutableStateFlow(BagModel())
     val bagState: StateFlow<BagModel> = _currentBag
