@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 
 // 2. Project-specific imports
 import com.example.bagscanner.models.BagModel
-import com.example.bagscanner.views.HomeScreen
+import com.example.bagscanner.views.ScannerView
 import com.example.bagscanner.enums.BagTypes
 
 // 3. Kotlin Coroutines imports
@@ -44,6 +44,6 @@ class ScannerController : ViewModel() {
 
     @Composable
     fun DisplayScreen() {
-        HomeScreen(this)
+        ScannerView(this)
     }
 }
