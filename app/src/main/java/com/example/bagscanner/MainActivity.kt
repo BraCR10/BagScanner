@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 
 // 3. Permission-related imports
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 // 4. Project-specific imports
 import com.example.bagscanner.controllers.ScannerController
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
     private fun startApp() {
         try {
             setContent {
-                val controller = ScannerController()
+                val controller: ScannerController = viewModel()
                 controller.DisplayScreen()
             }
         } catch (e: Exception) {
