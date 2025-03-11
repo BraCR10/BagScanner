@@ -22,7 +22,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -38,24 +37,13 @@ import com.example.bagscanner.services.ScannerModelService
 import com.example.bagscanner.enums.BagTypes
 
 @Composable
-fun HomeScreen(controller: ScannerController = viewModel()) {
+fun ScannerView(controller: ScannerController = viewModel()) {
     val homeState by controller.bagState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val scannerModelService = remember { ScannerModelService(context) }
     val cameraService = remember { CameraService(context, scannerModelService, controller) }
-
-    /*
-    *
-    * With this feature the camera will turn off the camera in each recompose
-    *
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            cameraService.shutdown()
-        }
-    }
-    * */
 
     Column(
         modifier = Modifier
@@ -143,9 +131,3 @@ fun RenderPreviewView(previewView: PreviewView, cameraService: CameraService, li
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewHomeScreen() {
-    val simulatedHomeController = ScannerController()
-    HomeScreen(controller = simulatedHomeController)
-}
