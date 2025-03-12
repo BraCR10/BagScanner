@@ -4,12 +4,14 @@ package com.example.bagscanner.views
 import android.content.Context
 import android.view.ViewGroup
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.*
 
 // 2. Compose Foundation imports
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 // 3. Compose Material imports
 import androidx.compose.material3.*
@@ -35,6 +37,7 @@ import com.example.bagscanner.controllers.ScannerController
 import com.example.bagscanner.services.CameraService
 import com.example.bagscanner.services.ScannerModelService
 import com.example.bagscanner.enums.BagTypes
+import com.example.bagscanner.enums.Screen
 
 @Composable
 fun ScannerView(controller: ScannerController = viewModel()) {
@@ -50,6 +53,7 @@ fun ScannerView(controller: ScannerController = viewModel()) {
             .fillMaxSize()
             .background(Color(0xFFF5F5F5))
     ) {
+
         // Header
         Box(
             modifier = Modifier
@@ -66,6 +70,20 @@ fun ScannerView(controller: ScannerController = viewModel()) {
                 color = Color.Black,
                 textAlign = TextAlign.Center
             )
+
+            IconButton(
+                onClick = { controller.navigateTo(Screen.Home) },
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 16.dp)
+                    .size(40.dp)
+            ) {
+                /*Image(
+                    painter = painterResource(id = R.drawable.arrow_back),
+                    contentDescription = "Volver",
+                    modifier = Modifier.size(24.dp)
+                )*/
+            }
         }
 
         // Camera box
