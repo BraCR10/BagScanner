@@ -26,7 +26,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 // 5. Project-specific imports
 import com.example.bagscanner.controllers.HomeController
-import com.example.bagscanner.enums.Screen
+import com.example.bagscanner.enums.Screens
+
 
 @Composable
 fun HomeView(controller: HomeController = viewModel()) {
@@ -52,7 +53,7 @@ fun HomeView(controller: HomeController = viewModel()) {
         ) {
             // Header
             Text(
-                text = "BagHunter",
+                text = "BagsHunter",
                 fontSize = 50.sp,
                 fontWeight = FontWeight.Bold,
                 color = textColor,
@@ -62,16 +63,14 @@ fun HomeView(controller: HomeController = viewModel()) {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Bag icon
+            // Logo
             Box(
                 modifier = Modifier
                     .size(150.dp)
                     .background(Color.White),
                 contentAlignment = Alignment.Center
             ) {
-               /* Icon(
-
-                )*/
+                //Logo img
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -79,21 +78,21 @@ fun HomeView(controller: HomeController = viewModel()) {
             // Action Buttons
             ActionButton(
                 text = "Escanear bolsos",
-                onClick = { controller.navigateTo(Screen.Scanner) }
+                onClick = { controller.navigateTo(Screens.Scanner) }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             ActionButton(
                 text = "Explorar locales",
-                onClick = { controller.navigateTo(Screen.Explore) }
+                onClick = { controller.navigateTo(Screens.Explore) }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             ActionButton(
                 text = "Localizar tienda",
-                onClick = { controller.navigateTo(Screen.Locations) }
+                onClick = { controller.navigateTo(Screens.Locations) }
             )
 
             Spacer(modifier = Modifier.weight(1f))

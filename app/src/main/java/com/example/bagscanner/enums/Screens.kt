@@ -1,6 +1,6 @@
 package com.example.bagscanner.enums
 
-enum class Screen {
+enum class Screens {
     Locations,
     Scanner,
     Explore,

@@ -4,7 +4,6 @@ package com.example.bagscanner.views
 import android.content.Context
 import android.view.ViewGroup
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
 import androidx.compose.runtime.*
 
 // 2. Compose Foundation imports
@@ -12,7 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 
 // 3. Compose Material imports
 import androidx.compose.material3.*
@@ -23,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,14 +31,13 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.bagscanner.R
 
 // 5. Project-specific imports
 import com.example.bagscanner.controllers.ScannerController
 import com.example.bagscanner.services.CameraService
 import com.example.bagscanner.services.ScannerModelService
 import com.example.bagscanner.enums.BagTypes
-import com.example.bagscanner.enums.Screen
+import com.example.bagscanner.enums.Screens
 
 @Composable
 fun ScannerView(controller: ScannerController = viewModel()) {
@@ -75,14 +72,14 @@ fun ScannerView(controller: ScannerController = viewModel()) {
             )
 
             IconButton(
-                onClick = { controller.navigateTo(Screen.Home) },
+                onClick = { controller.navigateTo(Screens.Home) },
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = 16.dp)
                     .size(40.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Volver",
                     modifier = Modifier.size(24.dp)
                 )
@@ -152,4 +149,5 @@ fun RenderPreviewView(previewView: PreviewView, cameraService: CameraService, li
         update = { cameraService.viewCamera(it, lifecycleOwner) }
     )
 }
+
 

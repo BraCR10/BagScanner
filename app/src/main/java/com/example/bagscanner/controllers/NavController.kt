@@ -1,10 +1,14 @@
 package com.example.bagscanner.controllers
 
+// 1. Standard imports
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+
+// 2. Navigation imports
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+
 
 @Composable
 fun NavController() {

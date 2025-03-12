@@ -9,9 +9,9 @@ import androidx.navigation.NavHostController
 import com.example.bagscanner.models.BagModel
 import com.example.bagscanner.views.ScannerView
 import com.example.bagscanner.enums.BagTypes
-import com.example.bagscanner.enums.Screen
+import com.example.bagscanner.enums.Screens
 
-// 3. Kotlin Coroutines imports
+// 3. Kotlin  imports
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -50,12 +50,12 @@ class ScannerController(private val navController: NavHostController) :
         ScannerView(this)
     }
 
-    override fun navigateTo(screen: Screen) {
+    override fun navigateTo(screen: Screens) {
         when (screen) {
-            Screen.Home -> navController.navigate("home")
-            Screen.Scanner -> navController.navigate("scanner")
-            Screen.Explore -> navController.navigate("explore")
-            Screen.Locations -> navController.navigate("locations")
+            Screens.Home -> navController.navigate("home")
+            Screens.Scanner -> navController.navigate("scanner")
+            Screens.Explore -> navController.navigate("explore")
+            Screens.Locations -> navController.navigate("locations")
         }
     }
 }
