@@ -3,18 +3,21 @@ package com.example.bagscanner.controllers
 // 1. Jetpack Compose & ViewModel imports
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
 
 // 2. Project-specific imports
 import com.example.bagscanner.models.BagModel
 import com.example.bagscanner.views.ScannerView
 import com.example.bagscanner.enums.BagTypes
+import com.example.bagscanner.enums.Screen
 
 // 3. Kotlin Coroutines imports
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 
-class ScannerController : ViewModel() {
+class ScannerController(private val navController: NavHostController) :
+    ViewModel(),IControllers {
     // Attributes
     private val _currentBag = MutableStateFlow(BagModel())
     val bagState: StateFlow<BagModel> = _currentBag
@@ -43,7 +46,16 @@ class ScannerController : ViewModel() {
     }
 
     @Composable
-    fun DisplayScreen() {
+    override fun DisplayScreen() {
         ScannerView(this)
+    }
+
+    override fun navigateTo(screen: Screen) {
+        when (screen) {
+            Screen.Home -> navController.navigate("home")
+            Screen.Scanner -> navController.navigate("scanner")
+            Screen.Explore -> navController.navigate("explore")
+            Screen.Locations -> navController.navigate("locations")
+        }
     }
 }
