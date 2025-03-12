@@ -187,26 +187,17 @@ fun HomeView(controller: HomeController = viewModel()) {
                     )
 
                     // Menu Items
-                    MenuOption(
-                        text = "Escanear bolsos",
-                        icon = "🎥"
-                    ) {
+                    MenuOption  (text="Escanear bolsos") {
                         controller.navigateTo(Screens.Scanner)
                         isMenuVisible.value = false
                     }
 
-                    MenuOption(
-                        text = "Explorar locales",
-                        icon = "🔎"
-                    ) {
+                    MenuOption(text = "Explorar locales") {
                         controller.navigateTo(Screens.Explore)
                         isMenuVisible.value = false
                     }
 
-                    MenuOption(
-                        text = "Localizar tienda",
-                        icon = "📍"
-                    ) {
+                    MenuOption(text = "Localizar tienda") {
                         controller.navigateTo(Screens.Locations)
                         isMenuVisible.value = false
                     }
@@ -227,7 +218,7 @@ fun HomeView(controller: HomeController = viewModel()) {
 }
 
 @Composable
-private fun MenuOption(text: String, icon: String, onClick: () -> Unit) {
+private fun MenuOption(text: String, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -245,11 +236,7 @@ private fun MenuOption(text: String, icon: String, onClick: () -> Unit) {
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = icon,
-                fontSize = 22.sp,
-                modifier = Modifier.padding(end = 16.dp)
-            )
+
 
             Text(
                 text = text,
