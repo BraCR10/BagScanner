@@ -11,7 +11,8 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 
 // 3. Compose Material imports
 import androidx.compose.material3.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,6 +33,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bagscanner.R
 
 // 5. Project-specific imports
 import com.example.bagscanner.controllers.ScannerController
@@ -78,12 +81,13 @@ fun ScannerView(controller: ScannerController = viewModel()) {
                     .padding(start = 16.dp)
                     .size(40.dp)
             ) {
-                /*Image(
-                    painter = painterResource(id = R.drawable.arrow_back),
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Volver",
                     modifier = Modifier.size(24.dp)
-                )*/
+                )
             }
+
         }
 
         // Camera box

@@ -13,7 +13,6 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
 
 // 3. Permission-related imports
 import androidx.core.content.ContextCompat
