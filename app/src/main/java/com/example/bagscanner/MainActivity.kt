@@ -13,14 +13,14 @@ import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
 
 // 3. Permission-related imports
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
-
 
 // 4. Project-specific imports
-import com.example.bagscanner.controllers.HomeController
+import com.example.bagscanner.controllers.NavController
+
 
 class MainActivity : ComponentActivity() {
 
@@ -50,8 +50,7 @@ class MainActivity : ComponentActivity() {
     private fun startApp() {
         try {
             setContent {
-                val controller: HomeController = viewModel()
-                controller.DisplayScreen()
+                NavController()
             }
         } catch (e: Exception) {
             Toast.makeText(this, "Error al iniciar la aplicación: ${e.message}", Toast.LENGTH_LONG).show()
@@ -73,3 +72,4 @@ class MainActivity : ComponentActivity() {
         finish()
     }
 }
+
