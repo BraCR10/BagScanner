@@ -41,6 +41,14 @@ import com.example.bagscanner.enums.Screens
 
 @Composable
 fun ScannerView(controller: ScannerController = viewModel()) {
+    val backgroundColor = Color(0xFFF5F5F5)
+    val headerBackgroundColor = Color(0xFFDAC5A0)
+    val headerBorderColor = Color(0xFF388E3C)
+    val cameraBoxBackgroundColor = Color(0xFFF0F0F0)
+    val cameraBoxBorderColor = Color(0xFFB0B0B0)
+    val textColor = Color.Black
+    val iconColor = Color.Black
+
     val homeState by controller.bagState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -51,7 +59,7 @@ fun ScannerView(controller: ScannerController = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
+            .background(backgroundColor)
     ) {
 
         // Header
@@ -59,15 +67,15 @@ fun ScannerView(controller: ScannerController = viewModel()) {
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 80.dp, max = LocalConfiguration.current.screenHeightDp.dp * 0.2f)
-                .background(Color(0xFFDAC5A0))
-                .border(2.dp, Color(0xFF388E3C)),
+                .background(headerBackgroundColor)
+                .border(2.dp, headerBorderColor),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "Escaner de bolsos",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = textColor,
                 textAlign = TextAlign.Center
             )
 
@@ -81,7 +89,8 @@ fun ScannerView(controller: ScannerController = viewModel()) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Volver",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
+                    tint = iconColor
                 )
             }
 
@@ -92,8 +101,8 @@ fun ScannerView(controller: ScannerController = viewModel()) {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .background(Color(0xFFF0F0F0))
-                .border(2.dp, Color(0xFFB0B0B0))
+                .background(cameraBoxBackgroundColor)
+                .border(2.dp, cameraBoxBorderColor)
         ) {
             val previewView = rememberPreviewView(context)
             RenderPreviewView(previewView, cameraService, lifecycleOwner)
@@ -104,8 +113,8 @@ fun ScannerView(controller: ScannerController = viewModel()) {
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 80.dp, max = LocalConfiguration.current.screenHeightDp.dp * 0.2f)
-                .background(Color(0xFFDAC5A0))
-                .border(2.dp, Color(0xFF388E3C)),
+                .background(headerBackgroundColor)
+                .border(2.dp, headerBorderColor),
             contentAlignment = Alignment.Center
         ) {
             // Conversion
@@ -120,12 +129,13 @@ fun ScannerView(controller: ScannerController = viewModel()) {
                 text = "Objeto encontrado: $bagTypeText",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = textColor,
                 textAlign = TextAlign.Center
             )
         }
     }
 }
+
 @Composable
 fun rememberPreviewView(context: Context): PreviewView {
     val previewView = remember { PreviewView(context) }
@@ -149,5 +159,3 @@ fun RenderPreviewView(previewView: PreviewView, cameraService: CameraService, li
         update = { cameraService.viewCamera(it, lifecycleOwner) }
     )
 }
-
-
