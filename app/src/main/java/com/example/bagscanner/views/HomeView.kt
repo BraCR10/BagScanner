@@ -17,6 +17,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 
 // 4. Compose UI imports
 import androidx.compose.ui.Alignment
@@ -154,11 +157,10 @@ fun HomeView(controller: HomeController = viewModel()) {
                 .clickable { isMenuVisible.value = !isMenuVisible.value },
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = ">",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF5D4037)
+            Icon(
+                imageVector = Icons.Default.Menu,
+                contentDescription = "Menu",
+                modifier = Modifier.size(26.dp)
             )
         }
 
