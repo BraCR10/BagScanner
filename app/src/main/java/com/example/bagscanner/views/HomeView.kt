@@ -238,7 +238,8 @@ fun HomeView(controller: HomeController = viewModel()) {
 
                     // Footer section
                     Text(
-                        text = "v2.0.0",
+                        text = "Made by Brian Ramirez & Victor Fung " +
+                                "\n v2.0.0",
                         fontSize = 14.sp,
                         color = Color(0xAAFFFFFF),
                         modifier = Modifier.align(Alignment.CenterHorizontally)
