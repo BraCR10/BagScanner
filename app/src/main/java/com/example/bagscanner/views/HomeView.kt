@@ -75,6 +75,36 @@ fun HomeView(controller: HomeController = viewModel()) {
 
             Spacer(modifier = Modifier.weight(1f))
 
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = "Bienvenido a nuestra APP",
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = textColor,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+                )
+
+                Text(
+                    text = """
+                    Esta app es un proyecto académico que puede reconocer 3 objetos:
+                    
+                    1. Bolso
+                    2. Maletín
+                    3. Lonchera
+                    
+                    Además, tiene una función para ver tiendas de bolsos cercanas y localizar una tienda específica.
+                """.trimIndent(),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = textColor.copy(alpha = 0.8f),
+                    textAlign = TextAlign.Center,
+                    lineHeight = 20.sp,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
 
             Box(
                 modifier = Modifier
