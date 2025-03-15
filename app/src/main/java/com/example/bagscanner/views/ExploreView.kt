@@ -25,6 +25,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.runtime.DisposableEffect
 
 // 4. Compose UI imports
 import androidx.compose.ui.Alignment
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bagscanner.R
 
 // 5. Google Maps related imports
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -139,7 +141,7 @@ fun ExploreView(controller: ExploreController = viewModel()) {
     }
 }
 
-@SuppressLint("MissingPermission")//The location is already enabled
+@SuppressLint("MissingPermission")
 @Composable
 fun MapContent(
     currentLocation: LatLng,
@@ -147,25 +149,22 @@ fun MapContent(
     controller: ExploreController
 ) {
     val context = LocalContext.current
-    val mapView = remember { MapView(context) }
 
-    AndroidView(
-        factory = { mapView },
-        modifier = Modifier.fillMaxSize()
-    ) { view ->
-        view.onCreate(null)
-        view.getMapAsync { googleMap ->
+    // Avoid recomposition
+    val mapView = remember { MapView(context).apply { id = R.id.map_view } }
 
+
+    LaunchedEffect(Unit) {
+        mapView.onCreate(null)
+        mapView.getMapAsync { googleMap ->
             googleMap.isMyLocationEnabled = true
             googleMap.uiSettings.isMyLocationButtonEnabled = true
             googleMap.uiSettings.isZoomControlsEnabled = true
 
-
             googleMap.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(currentLocation, 25f)
+                CameraUpdateFactory.newLatLngZoom(currentLocation, 15f)
             )
 
-            // Add markers for nearby stores
             nearbyStores.forEach { store ->
                 googleMap.addMarker(
                     MarkerOptions()
@@ -178,5 +177,19 @@ fun MapContent(
         }
 
         controller.registerMapLifecycle(mapView)
+    }
+
+
+    AndroidView(
+        factory = { mapView },
+        modifier = Modifier.fillMaxSize(),
+        update = { }
+    )
+
+   
+    DisposableEffect(Unit) {
+        onDispose {
+            mapView.onDestroy()
+        }
     }
 }
