@@ -23,43 +23,21 @@ import com.example.bagscanner.controllers.NavController
 
 class MainActivity : ComponentActivity() {
 
-    private val cameraPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            startApp()
-        } else {
-            Toast.makeText(this, "La aplicación requiere permiso de cámara para funcionar", Toast.LENGTH_LONG).show()
-            showSettingsPrompt()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Check camera access
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED) {
-            startApp()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_GRANTED) {
+            checkLocationPermission()
         } else {
             cameraPermissionRequest.launch(Manifest.permission.CAMERA)
-        }
-    }
-
-    private fun startApp() {
-        try {
-            setContent {
-                NavController()
-            }
-        } catch (e: Exception) {
-            Toast.makeText(this, "Error al iniciar la aplicación: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun showSettingsPrompt() {
         Toast.makeText(
             this,
-            "Por favor habilita el permiso de cámara en la configuración",
+            "Por favor habilita el permiso de cámara y ubicacion en la configuración",
             Toast.LENGTH_LONG
         ).show()
 
@@ -69,6 +47,46 @@ class MainActivity : ComponentActivity() {
         intent.data = uri
         startActivity(intent)
         finish()
+    }
+    private val cameraPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            checkLocationPermission()
+        } else {
+            Toast.makeText(this, "La aplicación requiere permiso de cámara y ubicacion para funcionar", Toast.LENGTH_LONG).show()
+            showSettingsPrompt()
+        }
+    }
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) ||
+            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) ->
+            {
+                startApp()
+            }
+            else -> {
+                showSettingsPrompt()
+            }
+        }
+    }
+
+    private fun checkLocationPermission() {
+        locationPermissionRequest.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
+    }
+    private fun startApp() {
+        try {
+            setContent {
+                NavController()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error al iniciar la aplicación: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 }
 
