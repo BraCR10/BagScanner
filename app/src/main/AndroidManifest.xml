@@ -2,11 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true"
-        />
-
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -25,12 +21,11 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="API_KEY" />
+            android:value="${googleMapsApiKey}" />
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.BagScanner">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

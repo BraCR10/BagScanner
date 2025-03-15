@@ -16,6 +16,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val mapsApiKey = project.findProperty("MAPS_API_KEY") ?: ""
+        manifestPlaceholders["googleMapsApiKey"] = mapsApiKey
     }
 
     buildTypes {
