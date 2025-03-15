@@ -27,6 +27,11 @@ fun NavController() {
             }
             scannerController.DisplayScreen()
         }
-
+        composable("explore") {
+            val exploreController: ExploreController = viewModel {
+                ExploreController(navController)
+            }
+            exploreController.DisplayScreen()
+        }
     }
 }
