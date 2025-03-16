@@ -1,69 +1,73 @@
 package com.example.bagscanner.views
 
 // 1. Standard Kotlin packages
-import android.annotation.SuppressLint
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 
 // 2. Compose Foundation imports
+
+// 3. Compose Material imports
+
+// 4. Compose UI imports
+
+// 5. Google Maps related imports
+
+// 6. Project-specific imports
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-
-// 3. Compose Material imports
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-
-// 4. Compose UI imports
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bagscanner.R
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.ui.text.style.TextOverflow
-
-// 5. Google Maps related imports
+import com.example.bagscanner.controllers.ExploreController
+import com.example.bagscanner.enums.Screens
+import com.example.bagscanner.models.StoreModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-// 6. Project-specific imports
-import com.example.bagscanner.controllers.ExploreController
-import com.example.bagscanner.enums.Screens
-import com.example.bagscanner.models.StoreModel
 
 @Composable
 fun ExploreView(controller: ExploreController = viewModel()) {
@@ -185,6 +189,7 @@ private fun StoreListFooter(
 private fun StoreCardComponent(
     store: StoreModel,
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .width(160.dp)
@@ -222,7 +227,22 @@ private fun StoreCardComponent(
         )
 
         Button(
-            onClick = {/*    WAZE  */},
+            onClick = { /*    WAZE  */
+
+                // "https://www.waze.com/ul?ll=9.896741056495557, -83.99821234578992&navigate=yes"
+
+            val latitude : String = store.latitude.toBigDecimal().toPlainString()
+            val longitude : String = store.longitude.toBigDecimal().toPlainString()
+            val waze = "https://www.waze.com/ul?ll="
+            val navigate = "&navigate=yes"
+            val coordinates = "$waze$latitude, $longitude$navigate"
+
+                val uri = Uri.parse(coordinates)
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(context, intent, null) // Deprecated pero no encontre la alternativa :P
+
+            },
+
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 4.dp),
