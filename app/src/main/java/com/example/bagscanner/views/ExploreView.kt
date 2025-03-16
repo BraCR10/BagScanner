@@ -41,6 +41,17 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bagscanner.R
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.text.style.TextOverflow
 
 // 5. Google Maps related imports
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -107,18 +118,17 @@ fun ExploreView(controller: ExploreController = viewModel()) {
             }
         }
 
-        // Map or loading state
         Box(
             modifier = Modifier
-                .fillMaxSize(),
+                .weight(1f)
+                .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
             when {
                 locationState.isLoading -> {
                     CircularProgressIndicator(
                         color = headerBorderColor,
-                        modifier = Modifier.size(50.dp)
-                    )
+                        modifier = Modifier.size(50.dp))
                 }
                 locationState.errorMessage.isNotEmpty() -> {
                     Text(
@@ -138,10 +148,92 @@ fun ExploreView(controller: ExploreController = viewModel()) {
                 }
             }
         }
+
+        if (locationState.nearbyStores.isNotEmpty()) {
+            StoreListFooter(
+                stores = locationState.nearbyStores,
+            )
+        }
     }
 }
 
-@SuppressLint("MissingPermission")
+@Composable
+private fun StoreListFooter(
+    stores: List<StoreModel>,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp)
+            .background(Color.White)
+            .shadow(elevation = 4.dp)
+    ) {
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            items(stores) { store ->
+                StoreCardComponent(store = store)
+            }
+        }
+    }
+}
+
+@Composable
+private fun StoreCardComponent(
+    store: StoreModel,
+) {
+    Column(
+        modifier = Modifier
+            .width(160.dp)
+            .shadow(2.dp, RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(8.dp))
+            .background(Color.White)
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        Text(
+            text = store.name,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 14.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+
+        Text(
+            text = store.address,
+            fontSize = 12.sp,
+            color = Color.Gray,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+
+        Text(
+            text =
+            if (store.distance >= 1000)
+                "%.1f km".format(store.distance / 1000)
+            else
+                "%d m".format(store.distance.toInt()),
+
+            fontSize = 12.sp,
+            color = Color(0xFF388E3C)
+        )
+
+        Button(
+            onClick = {/*    WAZE  */},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp),
+            shape = RoundedCornerShape(4.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF388E3C))
+        ) {
+            Text("Ir al local", fontSize = 12.sp)
+        }
+    }
+}
+@SuppressLint("MissingPermission")//location was already taken
 @Composable
 fun MapContent(
     currentLocation: LatLng,
@@ -186,7 +278,6 @@ fun MapContent(
         update = { }
     )
 
-   
     DisposableEffect(Unit) {
         onDispose {
             mapView.onDestroy()
