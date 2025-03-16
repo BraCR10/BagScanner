@@ -31,6 +31,8 @@ class ExploreController(private val navController: NavHostController) :
     private val _locationState = MutableStateFlow(LocationModel())
     val locationState: StateFlow<LocationModel> = _locationState
     private var locationService: LocationService? = null
+    private var isPeriodicSearchEnabled = false
+    private val searchRadius = 10000 // 10km radius
 
     // Methods
     fun startLocationService(context: Context) {
@@ -58,7 +60,14 @@ class ExploreController(private val navController: NavHostController) :
     private fun searchNearbyStores(location: LatLng) {
         viewModelScope.launch {
             _locationState.value = _locationState.value.copy(isLoading = true)
-            locationService?.searchNearbyBagStores(location, 20000) // 20km radius
+
+            locationService?.searchNearbyBagStores(location, searchRadius)
+
+            // To search periodically
+            if (!isPeriodicSearchEnabled) {
+                locationService?.startPeriodicSearch(location, searchRadius)
+                isPeriodicSearchEnabled = true
+            }
         }
     }
 
@@ -91,6 +100,8 @@ class ExploreController(private val navController: NavHostController) :
 
     override fun onCleared() {
         locationService?.stopLocationUpdates()
+        locationService?.stopPeriodicSearch()
+        isPeriodicSearchEnabled = false
         locationService = null
         super.onCleared()
     }
