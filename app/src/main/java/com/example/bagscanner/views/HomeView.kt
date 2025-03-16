@@ -229,10 +229,6 @@ fun HomeView(controller: HomeController = viewModel()) {
                         isMenuVisible.value = false
                     }
 
-                    MenuOption(text = "Localizar tienda") {
-                        controller.navigateTo(Screens.Locations)
-                        isMenuVisible.value = false
-                    }
 
                     Spacer(modifier = Modifier.weight(1f))
 
