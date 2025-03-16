@@ -36,6 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 // 5. Project-specific imports
 import com.example.bagscanner.controllers.HomeController
 import com.example.bagscanner.enums.Screens
+import kotlin.system.exitProcess
 
 
 @Composable
@@ -124,7 +125,9 @@ fun HomeView(controller: HomeController = viewModel()) {
 
             // Exit Button
             Button(
-                onClick = { /* Exit function */ },
+                onClick = {
+                    exitProcess(0);
+                },
                 modifier = Modifier
                     .padding(bottom = 24.dp)
                     .width(120.dp)

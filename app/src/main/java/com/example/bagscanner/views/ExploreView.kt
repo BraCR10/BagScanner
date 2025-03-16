@@ -242,7 +242,6 @@ private fun StoreCardComponent(
                 startActivity(context, intent, null) // Deprecated pero no encontre la alternativa :P
 
             },
-
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 4.dp),
