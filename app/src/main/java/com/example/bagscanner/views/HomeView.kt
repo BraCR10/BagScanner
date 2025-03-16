@@ -236,7 +236,7 @@ fun HomeView(controller: HomeController = viewModel()) {
                     Text(
                         text = "Made by Brian Ramirez & Victor Fung " +
                                 "\n v2.0.0",
-                        fontSize = 14.sp,
+                        fontSize = 12.sp,
                         color = Color(0xAAFFFFFF),
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
