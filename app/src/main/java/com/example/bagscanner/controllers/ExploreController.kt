@@ -17,6 +17,7 @@ import com.example.bagscanner.enums.Screens
 import com.example.bagscanner.models.LocationModel
 import com.example.bagscanner.models.StoreModel
 import com.example.bagscanner.services.LocationService
+import com.example.bagscanner.services.LocationServiceListener
 import com.example.bagscanner.views.ExploreView
 
 // 4. Kotlin coroutines imports
@@ -37,15 +38,23 @@ class ExploreController(private val navController: NavHostController) :
     // Methods
     fun startLocationService(context: Context) {
         if (locationService == null) {
-            locationService = LocationService(
-                context,
-                getNewLocation = { location -> getCurrentLocation(location) },
-                updateNearbyStores = { stores -> updateStores(stores) },
-                manageError = { message -> updateError(message) }
-            )
+            locationService = LocationService(context, object : LocationServiceListener {
+                override fun onNewLocation(location: Location) {
+                    getCurrentLocation(location)
+                }
+
+                override fun onNearbyStoresUpdated(stores: List<StoreModel>) {
+                    updateStores(stores)
+                }
+
+                override fun onError(errorMessage: String) {
+                    updateError(errorMessage)
+                }
+            })
         }
         startLocationUpdates()
     }
+
 
     private fun getCurrentLocation(location: Location) {
         val currentLatLng = LatLng(location.latitude, location.longitude)
@@ -61,7 +70,7 @@ class ExploreController(private val navController: NavHostController) :
         viewModelScope.launch {
             _locationState.value = _locationState.value.copy(isLoading = true)
 
-            locationService?.searchNearbyBagStores(location, searchRadius)
+            locationService?.searchBagStoresOnArea(location, searchRadius)
 
             // To search periodically
             if (!isPeriodicSearchEnabled) {

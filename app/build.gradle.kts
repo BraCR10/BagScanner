@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
     implementation(libs.places)
+    implementation(libs.ktor.client.cio)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
