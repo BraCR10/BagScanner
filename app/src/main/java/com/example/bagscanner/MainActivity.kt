@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat
 
 // 4. Project-specific imports
 import com.example.bagscanner.controllers.NavController
+import androidx.compose.foundation.Image
+
 
 
 class MainActivity : ComponentActivity() {

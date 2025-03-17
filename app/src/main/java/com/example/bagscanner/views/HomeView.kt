@@ -1,6 +1,7 @@
 package com.example.bagscanner.views
 
 // 1. Standard Kotlin packages
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,6 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bagscanner.controllers.HomeController
 import com.example.bagscanner.enums.Screens
 import kotlin.system.exitProcess
+import com.example.bagscanner.R
 
 
 @Composable
@@ -112,13 +115,15 @@ fun HomeView(controller: HomeController = viewModel()) {
 
             Box(
                 modifier = Modifier
-                    .size(150.dp)
-                    .shadow(8.dp, RoundedCornerShape(8.dp))
-                    .background(Color.White)
-                    .border(2.dp, Color(0xFFBE9B7B), RoundedCornerShape(8.dp)),
+                    .size(350.dp),
+                    //.shadow(8.dp, RoundedCornerShape(8.dp))
+                    //.border(2.dp, Color(0xFFBE9B7B), RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                //Logo img
+                Image(
+                    painter = painterResource(R.drawable.bagscannerlogonobg),
+                    contentDescription = "Icon Image"
+                )
             }
 
             Spacer(modifier = Modifier.weight(1f))
