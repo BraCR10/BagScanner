@@ -115,9 +115,9 @@ fun HomeView(controller: HomeController = viewModel()) {
 
             Box(
                 modifier = Modifier
-                    .size(350.dp),
+                    .size(300.dp),
                     //.shadow(8.dp, RoundedCornerShape(8.dp))
-                    //.border(2.dp, Color(0xFFBE9B7B), RoundedCornerShape(8.dp)),
+                    //border(2.dp, Color(0xFFBE9B7B), RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
